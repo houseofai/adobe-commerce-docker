@@ -4,7 +4,7 @@
 
 
 ## Prerequisites
-- Docker: It goes without saying, but Docker needs to be installed.
+- Docker: Installed, up and running
 - [Composer](https://getcomposer.org/): If Composer is not installed, the init script will install it.
 - A **Public/Private key** to access `repo.magento.com`.
   - You can create them on [https://marketplace.magento.com/](https://marketplace.magento.com). Check [the official documentation](https://devdocs.magento.com/guides/v2.4/install-gde/prereq/connect-auth.html) on how to set it up.

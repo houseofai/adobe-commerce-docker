@@ -10,6 +10,17 @@ MAGENTO_BASE_DIR=magento
 MAGENTO_COMPOSER_AUTH_FILE=auth.json
 MAGENTO_COMPOSER_FILE=composer.json
 
+# Install PHP extensions
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  sudo apt-get update && apt-get install php
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  brew update
+  brew install php@7.4
+  brew link php@7.4
+else
+  echo "Unsupported OS Type [$OSTYPE]"
+  exit 1
+fi
 
 if [ -d "$BASE_DIR" ]; then
   sudo rm -rf $BASE_DIR

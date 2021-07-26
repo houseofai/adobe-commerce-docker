@@ -1,12 +1,14 @@
 #!/bin/bash
 
 ROOT_DIR=$(pwd)
+CONFIG_DIR=$ROOT_DIR/config
 BASE_DIR=tmp
 
 MAGENTO_EDITION=enterprise
 #MAGENTO_EDITION=community
 MAGENTO_BASE_DIR=magento
 MAGENTO_COMPOSER_AUTH_FILE=auth.json
+MAGENTO_COMPOSER_FILE=composer.json
 
 
 if [ -d "$BASE_DIR" ]; then
@@ -30,8 +32,8 @@ then
 fi
 
 # Check for Composer authentication file
-if [ ! -f $ROOT_DIR/$MAGENTO_COMPOSER_AUTH_FILE ]; then
-    echo "Composer authentication file $MAGENTO_COMPOSER_AUTH_FILE not found in $ROOT_DIR!"
+if [ ! -f $CONFIG_DIR/$MAGENTO_COMPOSER_AUTH_FILE ]; then
+    echo "Composer authentication file $MAGENTO_COMPOSER_AUTH_FILE not found in $CONFIG_DIR!"
     exit 1
 fi
 
@@ -39,7 +41,8 @@ set -ex
 
 mkdir $BASE_DIR
 cd $BASE_DIR
-cp $ROOT_DIR/$MAGENTO_COMPOSER_AUTH_FILE .
+cp $CONFIG_DIR/$MAGENTO_COMPOSER_AUTH_FILE .
+cp $CONFIG_DIR/$MAGENTO_COMPOSER_FILE .
 
 # Create a project from a template
 composer create-project --repository-url=https://repo.magento.com/ magento/project-$MAGENTO_EDITION-edition $MAGENTO_BASE_DIR

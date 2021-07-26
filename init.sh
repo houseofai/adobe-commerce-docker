@@ -62,7 +62,7 @@ composer create-project --repository-url=https://repo.magento.com/ magento/proje
 cd $MAGENTO_BASE_DIR
 
 # Copy the Composer authentication file
-cp $ROOT_DIR/$MAGENTO_COMPOSER_AUTH_FILE .
+cp $CONFIG_DIR/$MAGENTO_COMPOSER_AUTH_FILE .
 
 # Import all vendors packages
 composer require --no-update --dev magento/ece-tools magento/magento-cloud-docker
@@ -70,11 +70,11 @@ composer require --no-update --dev magento/ece-tools magento/magento-cloud-docke
 # Creates the ece-docker tool
 composer update
 
-cp $ROOT_DIR/magento/.magento.docker.yml .
+cp $CONFIG_DIR/.magento.docker.yml .
 ./vendor/bin/ece-docker build:compose --mode="developer"
 
-cp $ROOT_DIR/magento/config.env .docker/
-cp $ROOT_DIR/docker-compose.yml .
+cp $CONFIG_DIR/config.env .docker/
+cp $CONFIG_DIR/docker-compose.yml .
 
 #Start all containers
 sudo docker-compose up -d

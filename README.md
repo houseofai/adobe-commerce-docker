@@ -32,7 +32,7 @@ Open the file named `auth.json` and replace `<public-key>` and `<private-key>` w
 ```
 
 
-### 3. Download Docker images and initialize Magento
+### 3. Initialize Magento
 Run the `init.sh` script:
 ```
 chmod +x init.sh
@@ -42,6 +42,7 @@ chmod +x init.sh
 
 *Note:* On the first run, Docker needs to download a couple of images to run Magento (Redis, Varnish, FPM, Nginx, MariaDB, AEM). If your system doesn't have those images locally, it might take a while, depending on your internet connection.
 
+**Important:** If the script fails for some reason, see the `Shutdown` section to clean your environment before running the script again.
 
 ## Start
 ```
@@ -62,11 +63,11 @@ password = 123123q
 ## Shutdown
 
 ```
-cd projects/magento
+cd tmp/magento
 sudo docker-compose stop
 ```
 or to shut down docker containers and remove them (and lose all your changes)
 ```
-cd projects/magento
+cd tmp/magento
 sudo docker-compose down -v
 ```

@@ -59,7 +59,7 @@ composer create-project --repository-url=https://repo.magento.com/ magento/proje
 cd $MAGENTO_BASE_DIR
 
 # Copy the Composer authentication file
-cp $MAGENTO_COMPOSER_AUTH_FILE .
+cp $ROOT_DIR/$MAGENTO_COMPOSER_AUTH_FILE .
 
 # Import all vendors packages
 composer require --no-update --dev magento/ece-tools magento/magento-cloud-docker

@@ -1,6 +1,6 @@
 # Adobe Commerce environment on Docker (formerly Adobe Magento Cloud)
 
-*Note:* This integration should be used for demo or development purposes only as it is not correctly configured for production.
+*Note:* This integration should be used for demo or development purposes only as it is not configured for production.
 
 
 ## Prerequisites

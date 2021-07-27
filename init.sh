@@ -10,28 +10,31 @@ MAGENTO_BASE_DIR=magento
 MAGENTO_COMPOSER_AUTH_FILE=auth.json
 MAGENTO_COMPOSER_FILE=composer.json
 
-# Install PHP extensions
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  sudo apt-get update && apt-get install php
+  echo "~ Linux install script ~ "
+  . "$DIR/scripts/init-linux.sh"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-  brew update
-  brew install php@7.4
-  brew link php@7.4
+  echo "~ Darwin install script ~ "
+  . "$DIR/scripts/init-darwin.sh"
 else
   echo "Unsupported OS Type [$OSTYPE]"
   exit 1
 fi
 
-if [ -d "$BASE_DIR" ]; then
-  sudo rm -rf $BASE_DIR
-fi
+# Run the install script
+install
+# Clean current folder
+start_clean $BASE_DIR
 
-# Check for Composer tool
-if [ ! -x "$(command -v docker)" ]; then
-    echo "Docker doesn't exist. Please install it"
+# Check if docker is running
+if is_docker_stopped; then
+    echo "Docker does not seem to be running, run it first and retry"
     exit 1
 fi
-
 
 # Check for Composer tool
 if ! command -v composer &> /dev/null
@@ -67,6 +70,8 @@ cp $CONFIG_DIR/$MAGENTO_COMPOSER_AUTH_FILE .
 # Import all vendors packages
 composer require --no-update --dev magento/ece-tools magento/magento-cloud-docker
 
+# @FIX
+composer require --no-update --dev symfony/console=4.4.26
 # Creates the ece-docker tool
 composer update
 
@@ -76,48 +81,9 @@ cp $CONFIG_DIR/.magento.docker.yml .
 cp $CONFIG_DIR/config.env .docker/
 cp $CONFIG_DIR/docker-compose.yml .
 
+
+./bin/magento module:enable --all --clear-static-content
+./bin/magento module:disable Magento_TwoFactorAuth --clear-static-content
+
 #Start all containers
-sudo docker-compose up -d
-
-{
-  set -ex
-  # Enable all modules (and cleared all generated classes)
-  sudo docker-compose run --rm deploy magento-command module:enable --all --clear-static-content
-  #./bin/magento module:enable --all --clear-static-content
-
-  # Disable Two Factor Authentication for easier authentication
-  sudo docker-compose run --rm deploy magento-command module:disable Magento_TwoFactorAuth
-  #./bin/magento module:disable Magento_TwoFactorAuth
-
-  # Deploy Magento
-  sudo docker-compose run --rm deploy cloud-deploy
-  #bin/magento config:set system/full_page_cache/caching_application 2
-  #bin/magento setup:config:set --http-cache-hosts=varnish -n
-  #php ./vendor/bin/ece-tools run scenario/build/generate.xml
-  #php ./vendor/bin/ece-tools run scenario/build/transfer.xml
-  #php ./vendor/bin/ece-tools run scenario/deploy.xml
-  #php ./vendor/bin/ece-tools run scenario/post-deploy.xml
-  # 'mounts': {'var': {'path': 'var'}, 'app-etc': {'path': 'app/etc'}, 'pub-media': {'path': 'pub/media'}, 'pub-static': {'path': 'pub/static'}}
-
-  # Deploy sample data (takes couple of minutes)
-  sudo docker-compose run --rm deploy magento-command sampledata:deploy
-  #bin/magento sampledata:deploy
-
-  # Upgrade Magento installation
-  sudo docker-compose run --rm deploy magento-command setup:upgrade
-  #bin/magento setup:upgrade
-
-  # Compile classes
-  sudo docker-compose run --rm deploy magento-command setup:di:compile
-  #bin/magento setup:di:compile
-
-  # Flush cache
-  sudo docker-compose run --rm deploy magento-command cache:clean
-  #bin/magento  cache:clean
-
-  # Stop all containers
-  sudo docker-compose stop
-} || {
-  # Stop all containers
-  sudo docker-compose down -v
-}
+#start_magento

@@ -18,7 +18,7 @@ cd adobe-commerce-docker
 ```
 
 ### 2. Composer authentication file:
-Open thefile named `auth.json` and replace `<public-key>` and `<private-key>` with the keys you copied from your profile on the Magento website [https://marketplace.magento.com](https://marketplace.magento.com).:
+Open the file named `auth.json` and replace `<public-key>` and `<private-key>` with the keys you copied from your profile on the Magento website [https://marketplace.magento.com](https://marketplace.magento.com).:
 
 ```
 {

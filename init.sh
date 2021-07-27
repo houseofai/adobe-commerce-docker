@@ -2,7 +2,6 @@
 
 ROOT_DIR=$(pwd)
 CONFIG_DIR=$ROOT_DIR/config
-BASE_DIR=tmp
 
 MAGENTO_EDITION=enterprise
 #MAGENTO_EDITION=community
@@ -28,7 +27,7 @@ fi
 # Run the install script
 install
 # Clean current folder
-start_clean $BASE_DIR
+start_clean $MAGENTO_BASE_DIR
 
 # Check if docker is running
 if is_docker_stopped; then
@@ -46,17 +45,12 @@ then
 fi
 
 # Check for Composer authentication file
-if [ ! -f $CONFIG_DIR/$MAGENTO_COMPOSER_AUTH_FILE ]; then
+if [ ! -f $MAGENTO_COMPOSER_AUTH_FILE ]; then
     echo "Composer authentication file $MAGENTO_COMPOSER_AUTH_FILE not found in $CONFIG_DIR!"
     exit 1
 fi
 
 set -ex
-
-mkdir $BASE_DIR
-cd $BASE_DIR
-cp $CONFIG_DIR/$MAGENTO_COMPOSER_AUTH_FILE .
-cp $CONFIG_DIR/$MAGENTO_COMPOSER_FILE .
 
 # Create a project from a template
 composer create-project --repository-url=https://repo.magento.com/ magento/project-$MAGENTO_EDITION-edition $MAGENTO_BASE_DIR
@@ -65,7 +59,7 @@ composer create-project --repository-url=https://repo.magento.com/ magento/proje
 cd $MAGENTO_BASE_DIR
 
 # Copy the Composer authentication file
-cp $CONFIG_DIR/$MAGENTO_COMPOSER_AUTH_FILE .
+cp $MAGENTO_COMPOSER_AUTH_FILE .
 
 # Import all vendors packages
 composer require --no-update --dev magento/ece-tools magento/magento-cloud-docker
@@ -81,9 +75,8 @@ cp $CONFIG_DIR/.magento.docker.yml .
 cp $CONFIG_DIR/config.env .docker/
 cp $CONFIG_DIR/docker-compose.yml .
 
-
 ./bin/magento module:enable --all --clear-static-content
 ./bin/magento module:disable Magento_TwoFactorAuth --clear-static-content
 
 #Start all containers
-#start_magento
+start_magento

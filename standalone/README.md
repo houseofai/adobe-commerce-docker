@@ -34,3 +34,17 @@ For the Community Edition of PWA/Venia version, run:
 docker run -p 80:80 -p 10000:10000 -t odyssee/magento-pwa-venia:2.4.1-p1-ce
 ```
 *Note:* For the Enterprise edition switch the `ce` to `ee`
+
+Access:
+- For Magento: [http://localhost/](http://localhost)
+- For Magento admin: [http://localhost/admin](http://localhost/admin)
+  - User: `admin`
+  - Password: `123123q`
+- For PWA:
+  - PWADevServer: [http://localhost:10000](http://localhost:10000)
+  - GraphQL Playground: [http://localhost:10000/graphiql](http://localhost:10000/graphiql)
+
+
+## Build
+
+To build your own image, you will need to fill out the file `auth.json`

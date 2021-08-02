@@ -130,4 +130,4 @@ RUN cd ${MAGENTO_ROOT} \
 RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-EXPOSE 80 10000
+EXPOSE 80

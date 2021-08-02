@@ -10,8 +10,10 @@ ENV MAGENTO_DIR magento2
 RUN apt-get update \
   && apt-get upgrade -y \
   && apt-get install -y --no-install-recommends \
-  npm
+  npm \
+  ssh
 
+COPY auth.json /root/.config/composer/
 RUN npm install -g npm \
     && npm upgrade node \
     && npm install --global yarn \
@@ -22,15 +24,24 @@ RUN npm install -g npm \
     && cd $MAGENTO_ROOT/$MAGENTO_DIR \
     && git clone https://github.com/magento/pwa-studio.git \
     && cd pwa-studio \
+    && service elasticsearch start \
     && service mysql start \
     && yarn install && yarn run build \
     && cp packages/venia-concept/deployVeniaSampleData.sh .. \
     && cd .. \
+    && cp /root/.config/composer/auth.json . \
+    && composer update \
     && chmod +x deployVeniaSampleData.sh \
+    && ./deployVeniaSampleData.sh --yes --path $MAGENTO_ROOT/$MAGENTO_DIR \
     && bin/magento setup:upgrade \
-    && bin/magento indexer:reindex
+    && bin/magento indexer:reindex \
+    && rm ./auth.json \
+    && rm /root/.config/composer/auth.json
 
 WORKDIR $MAGENTO_ROOT/$MAGENTO_DIR/pwa-studio
-ENTRYPOINT ["nohup", "yarn", "run", "watch:all", "&", "/docker-entrypoint.sh"]
+
+COPY docker-entrypoint-pwa.sh /docker-entrypoint.sh
+RUN ["chmod", "+x", "/docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 80 10000

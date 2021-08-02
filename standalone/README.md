@@ -47,4 +47,4 @@ Access:
 
 ## Build
 
-To build your own image, you will need to fill out the file `auth.json`
+To build your own image, you will need to fill out the file `auth.json`. Then look at the script `build.sh`

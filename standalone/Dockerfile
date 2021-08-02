@@ -3,8 +3,9 @@ FROM ubuntu
 ARG DEBIAN_FRONTEND=noninteractive
 ARG PHP_VERSION=7.4
 ARG NGINX=stable
-ENV MAGNETO_MODE enterprise
-# ENV MAGNETO_MODE community
+#ARG mode=enterprise
+ARG mode=community
+
 ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE 1
 ENV MAGENTO_ROOT /var/www/html
 ENV MAGENTO_DIR magento2

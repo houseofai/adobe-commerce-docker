@@ -21,7 +21,7 @@ Here are the different image versions:
 
 For the Community Edition of the simple version, run:
 ```
-docker run -p 80:80 -t odyssee/magento-luma:2.4.1-p1-ce
+docker run -p 80:80 -t odyssee/magento:2.4.1-p1-ce
 ```
 
 For the Community Edition of Luma version, run:

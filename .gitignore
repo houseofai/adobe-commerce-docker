@@ -1,3 +1,4 @@
 .idea/
 config/auth.json
 tmp/
+microservices/magento
